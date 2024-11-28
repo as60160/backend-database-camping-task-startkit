@@ -26,6 +26,7 @@ VALUES
   ('透明人', 'opacity0@hexschooltest.io', 'USER');
 
 -- 1-2 修改：用 Email 找到 李燕容、肌肉棒子、Q太郎，如果他的 Role 為 USER 將他的 Role 改為 COACH
+
 UPDATE
   "USER"
 SET
@@ -37,17 +38,23 @@ WHERE
     'starplatinum@hexschooltest.io'
   )
   AND ROLE = 'USER';
+
 -- 1-3 刪除：刪除USER 資料表中，用 Email 找到透明人，並刪除該筆資料
+
 DELETE FROM
   "USER"
 WHERE
   email = 'opacity0@hexschooltest.io';
+
 -- 1-4 查詢：取得USER 資料表目前所有用戶數量（提示：使用count函式）
+
 SELECT
   COUNT(*) AS 所有用戶數量
 FROM
   "USER";
+
 -- 1-5 查詢：取得 USER 資料表所有用戶資料，並列出前 3 筆（提示：使用limit語法）
+
 SELECT
   *
 FROM
@@ -67,11 +74,38 @@ LIMIT
     -- 2. 名稱為`14 堂組合包方案`，價格為`2,520` 元，堂數為`14`
     -- 3. 名稱為 `21 堂組合包方案`，價格為`4,800` 元，堂數為`21`
 
+INSERT INTO
+  "CREDIT_PACKAGE"(name, credit_amount, price)
+VALUES
+  ('7 堂組合包方案', 7, 1400),
+  ('14 堂組合包方案', 14, 2520),
+  ('21 堂組合包方案', 21, 4800);
+
 -- 2-2. 新增：在 `CREDIT_PURCHASE` 資料表，新增三筆資料：（請使用 name 欄位做子查詢）
     -- 1. `王小明` 購買 `14 堂組合包方案`
     -- 2. `王小明` 購買 `21 堂組合包方案`
     -- 3. `好野人` 購買 `14 堂組合包方案`
 
+INSERT INTO "CREDIT_PURCHASE"(user_id, credit_package_id, purchased_credits, price_paid)
+VALUES
+  (
+    (SELECT id FROM "USER" WHERE name = '王小明'),
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'),
+    (SELECT credit_amount FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'),
+    (SELECT price FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案')
+  ),
+  (
+    (SELECT id FROM "USER" WHERE name = '王小明'),
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '21 堂組合包方案'),
+    (SELECT credit_amount FROM "CREDIT_PACKAGE" WHERE name = '21 堂組合包方案'),
+    (SELECT price FROM "CREDIT_PACKAGE" WHERE name = '21 堂組合包方案')
+  ),
+  (
+    (SELECT id FROM "USER" WHERE name = '好野人'),
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'),
+    (SELECT credit_amount FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'),
+    (SELECT price FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案')
+  );
 
 -- ████████  █████   █    ████   
 --   █ █   ██    █  █         ██ 
